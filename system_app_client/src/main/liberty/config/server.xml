@@ -1,0 +1,15 @@
+<server description="Sample Servlet server">
+    <featureManager>
+        <feature>restfulWS-3.1</feature>
+        <feature>jsonp-2.1</feature>
+        <feature>jsonb-3.0</feature>
+        <feature>cdi-4.0</feature>
+        <feature>mpMetrics-5.0</feature>
+        <feature>mpConfig-3.0</feature>
+        <feature>mpHealth-4.0</feature>
+    </featureManager>
+    
+    <httpEndpoint httpPort="9090" httpsPort="9444" id="defaultHttpEndpoint" contextRoot="/" />
+    
+    <webApplication id="system_app_client" location="system_app_client.war" name="system_app_client"/>
+</server>

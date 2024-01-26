@@ -8,16 +8,16 @@ import jakarta.ws.rs.core.MediaType;
 
 import java.util.concurrent.TimeUnit;
 
-//@RequestScoped
-//@Path("/current-time")
+@RequestScoped
+@Path("/current-time")
 public class CurrentTimeResource {
 
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-    public CurrentTime getCurrentTime() throws InterruptedException {
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getCurrentTime() throws InterruptedException {
         long requestTime = System.currentTimeMillis();
         Thread.sleep(TimeUnit.SECONDS.toMillis(2));
         long currentTime = System.currentTimeMillis();
-        return new CurrentTime(requestTime, currentTime);
+        return new CurrentTime(requestTime, currentTime).toString();
     }
 }

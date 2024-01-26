@@ -1,5 +1,6 @@
 package io.openliberty.sample.system;
 
+import java.text.MessageFormat;
 import java.util.concurrent.TimeUnit;
 
 public class CurrentTime {
@@ -48,9 +49,6 @@ public class CurrentTime {
 
     @Override
     public String toString() {
-        return "CurrentTime{" +
-                "requestTime='" + requestTime + '\'' +
-                ", currentTime='" + currentTime + '\'' +
-                '}';
+        return MessageFormat.format( "CurrentTime: requestTime={0},  currentTime={1}", requestTime, currentTime);
     }
 }

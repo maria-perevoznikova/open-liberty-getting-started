@@ -13,11 +13,12 @@ import java.util.concurrent.TimeUnit;
 public class CurrentTimeResource {
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getCurrentTime() throws InterruptedException {
+    @Produces(MediaType.APPLICATION_JSON)
+    public CurrentTime getCurrentTime() throws InterruptedException {
         long requestTime = System.currentTimeMillis();
         Thread.sleep(TimeUnit.SECONDS.toMillis(2));
         long currentTime = System.currentTimeMillis();
-        return new CurrentTime(requestTime, currentTime).toString();
+
+        return new CurrentTime(requestTime, currentTime);
     }
 }

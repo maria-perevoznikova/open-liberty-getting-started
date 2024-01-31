@@ -16,7 +16,7 @@ public class CurrentTimeResource {
     @Produces(MediaType.APPLICATION_JSON)
     public CurrentTime getCurrentTime() throws InterruptedException {
         long requestTime = System.currentTimeMillis();
-        Thread.sleep(TimeUnit.SECONDS.toMillis(2));
+        Thread.sleep(TimeUnit.SECONDS.toMillis(1));
         long currentTime = System.currentTimeMillis();
 
         return new CurrentTime(requestTime, currentTime);

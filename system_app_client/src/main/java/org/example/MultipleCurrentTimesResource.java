@@ -14,8 +14,8 @@ public class MultipleCurrentTimesResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<String> getCurrentTime() {
-        return List.of("A", "B");
+    public List<String> getCurrentTimes() {
+        return new CurrentTimeClient().getCurrentTimes();
     }
 }
 

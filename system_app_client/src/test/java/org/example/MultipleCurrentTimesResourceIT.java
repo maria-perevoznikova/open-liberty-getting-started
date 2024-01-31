@@ -1,22 +1,22 @@
 package org.example;
 
+import static java.net.http.HttpClient.newHttpClient;
 import static org.junit.Assert.*;
 import org.junit.Test;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.GetMethod;
+
+import java.net.URI;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
 
 public class MultipleCurrentTimesResourceIT {
     private static final String URL = "http://localhost:9090/system-app-client/client/multiple-current-times";
 
     @Test
     public void returnsValidResponse() throws Exception {
-        GetMethod method = new GetMethod(URL);
+        HttpRequest request = HttpRequest.newBuilder(URI.create(URL)).GET().timeout(Duration.ofSeconds(10)).build();
+        HttpResponse<String> response = newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
 
-        int statusCode = new HttpClient().executeMethod(method);
-        String response = method.getResponseBodyAsString();
-
-        assertEquals(HttpStatus.SC_OK, statusCode);
-        assertEquals("[\"A\",\"B\"]", response);
+        assertEquals(200, response.statusCode());
     }
 }

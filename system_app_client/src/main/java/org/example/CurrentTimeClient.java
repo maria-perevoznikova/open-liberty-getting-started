@@ -1,35 +1,39 @@
 package org.example;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.time.Duration;
-import java.util.List;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.core.MediaType;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CompletionStage;
+import java.util.stream.Stream;
+
+@RequestScoped
 public class CurrentTimeClient {
 
     private static final String URL = "http://localhost:9080/system/current-time";
 
-    private final HttpClient httpClient = HttpClient.newHttpClient();
+    private final Client rsClient = ClientBuilder.newClient();
 
     public List<String> getCurrentTimes() {
+        List<String> result = Collections.synchronizedList(new ArrayList<>());
         try {
-            return List.of(
-                    getCurrentTime(),
-                    getCurrentTime(),
-                    getCurrentTime(),
-                    getCurrentTime(),
-                    getCurrentTime()
-            );
+            Stream.of(getCurrentTimeAsync(), getCurrentTimeAsync(), getCurrentTimeAsync(), getCurrentTimeAsync(), getCurrentTimeAsync())
+                    .map(t -> t.thenAccept(result::add))
+                    .forEach(t -> t.toCompletableFuture().join());
         } catch (Exception e) {
-            return List.of("ERROR", e.getMessage());
+            result.add("ERROR: " + e.getMessage());
         }
+        return result;
     }
 
-    public String getCurrentTime() throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder(URI.create(URL)).GET().timeout(Duration.ofSeconds(5)).build();
-        return httpClient.send(request, HttpResponse.BodyHandlers.ofString()).body();
+    public CompletionStage<String> getCurrentTimeAsync() {
+       return rsClient.target(URL)
+                .request(MediaType.APPLICATION_JSON)
+                .rx()
+                .get(String.class);
     }
 }
